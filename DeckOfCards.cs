@@ -8,87 +8,61 @@ namespace ProjektB_Inlämningsuppgift
 {
     class DeckOfCards : IDeckOfCards
     {
-        #region cards List related
+        #region cards List related  //Finished
         protected const int MaxNrOfCards = 52;
+        protected int nrOfCards = 52;
         protected List<PlayingCard> cards = new List<PlayingCard>(MaxNrOfCards);
 
         public DeckOfCards()
         {
             CreateFreshDeck();
-        }
-        public PlayingCard this[int idx]
-        {
-            get
-            {
-                return cards[idx];
-            }
+        }                               // Finished. Uses the "CreateFreshDeck" wich creates a new deck of cards.
+        public PlayingCard this[int idx] => cards[idx];                   // Finished. Creates a indexer for "PlayingCard".
+        public int Count => nrOfCards;                       // Finished. A Counter
 
-        }
-        public int Count
-        {
-            get
-            {
-                int count = 0;
-                for (int i = 0; i < cards.Count; i++)
-                {
-                    if (cards[i] != null)
-                    {
-                        count++;
-                    }
-                }
-                return count;
-            }
-
-        }
         #endregion
 
-        #region ToString() related
+        #region ToString() related      //Finished
         public override string ToString()
         {
             string sRet = "";
             for (int i = 0; i < cards.Count(); i++)
             {
-                if (cards[i] != null)
+                sRet += $"{cards[i],-8}";
+                if ((i+1) % 13 == 0)
                 {
-                    sRet += cards[i].ToString() + "\n";
+                    sRet = sRet + "\n";
                 }
             }
             return sRet;
-        }
+        }                       // Finished. Creates a string to print.
         #endregion
 
-        #region Shuffle and Sorting
+        #region Shuffle and Sorting     //Finished
         public void Shuffle()
         {
-            var rnd = new Random();
-            int card1;
-            int card2;
-            PlayingCard card;
-
-            for (int i = 0; i < 500; i++)
+            Random rnd = new Random();
+            int nrOfShuffles = rnd.Next(100, 10000);
+            for (int i = 0; i < nrOfShuffles; i++)
             {
-                card1 = rnd.Next(0, 52);
-                card2 = rnd.Next(0, 52);
-                card = cards[card1];
-                cards[card1] = cards[card2];
-                cards[card2] = card;
+                int card1 = rnd.Next(0, 52);
+                int card2 = rnd.Next(0, 52);
+
+                (cards[card1], cards[card2]) = (cards[card2], cards[card1]);
             }
-        }
+        }                                   // Finished. A Method that shuffles the Deck of cards.
         public void Sort()
         {
+            cards.Sort((x, y) => x.Value.CompareTo(y.Value));
+        }                                      // Finished. A method that sorts the Deck of cards.
+        #endregion                      
 
-
-
-        }
-        #endregion
-
-        #region Creating a fresh Deck
-        public void Clear()
+        #region Creating a fresh Deck   //Finished
+        public virtual void Clear()
         {
+            cards.Clear();
+        }                       //Finished. Clears the Deck to empty.
 
-
-
-        }
         public void CreateFreshDeck()
         {
             int cardNr = 0;
@@ -102,29 +76,14 @@ namespace ProjektB_Inlämningsuppgift
                 }
             }
 
-        }                                                   // BORDE VARA KLAR!?
+        }                            //Finished. Creates a new fresh deck of 52 cards wich contains both Value and Color.
         #endregion
 
-        #region Dealing
-        public PlayingCard RemoveTopCard()                                  // SKITDÅLIG??
+        #region Dealing     //Finished
+        public PlayingCard RemoveTopCard()
         {
-            bool notTopCard = false;
-            int noCards = 52;
-
-            while (!notTopCard)
-            {
-                noCards--;
-                if (cards[noCards] != null)
-                {
-                    notTopCard = true;
-                }
-
-            }
-            PlayingCard card = cards[noCards];
-            cards[noCards] = null;
-
-            return card;
-        }
+            return cards[nrOfCards-- -1];
+        }           // Finished. Removes the card at the top.
         #endregion
     }
 }
